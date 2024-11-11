@@ -4,23 +4,25 @@ enum ArgType {
     Boolean,
 }
 
+#[derive(Debug, PartialEq)]
 enum Value {
-    Boolean,
+    Boolean(bool),
 }
 
 struct Arguments;
 
 impl Arguments {
     fn new(config: HashMap<char, ArgType>) -> Self {
-        todo!();
+        Arguments {
+        }
     }
 
     fn with(self, args: Vec<String>) -> Self {
-        todo!();
+        self
     }
 
     fn build(self) -> HashMap<char, Value> {
-        todo!();
+        HashMap::new()
     }
 }
 
@@ -42,5 +44,8 @@ mod tests {
             .build();
 
         // then
+        assert_eq!(arguments, HashMap::from(
+            [('b', Value::Boolean(true))],
+        ));
     }
 }
