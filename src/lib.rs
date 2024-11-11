@@ -9,16 +9,24 @@ enum Value {
     Boolean(bool),
 }
 
-struct Arguments;
+struct Arguments {
+    config: HashMap<char, ArgType>,
+    args: Vec<String>,
+}
 
 impl Arguments {
     fn new(config: HashMap<char, ArgType>) -> Self {
         Arguments {
+            config,
+            args: Vec::new(),
         }
     }
 
     fn with(self, args: Vec<String>) -> Self {
-        self
+        Self {
+            args,
+            ..self
+        }
     }
 
     fn build(self) -> HashMap<char, Value> {
