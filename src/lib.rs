@@ -4,6 +4,10 @@ enum ArgType {
     Boolean,
 }
 
+enum Value {
+    Boolean,
+}
+
 struct Arguments;
 
 impl Arguments {
@@ -15,7 +19,7 @@ impl Arguments {
         todo!();
     }
 
-    fn build(self) -> Self {
+    fn build(self) -> HashMap<char, Value> {
         todo!();
     }
 }
