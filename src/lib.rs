@@ -29,8 +29,13 @@ impl Arguments {
         }
     }
 
-    fn build(self) -> HashMap<char, Value> {
-        HashMap::new()
+    fn build(&self) -> HashMap<char, Value> {
+        let map = HashMap::new();
+
+        for a in &self.args {
+        }
+
+        map
     }
 }
 
