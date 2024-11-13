@@ -9,6 +9,15 @@ enum Value {
     Boolean(bool),
 }
 
+struct Argument {
+}
+
+impl Argument {
+    fn from(string: &str) {
+
+    }
+}
+
 struct Arguments {
     config: HashMap<char, ArgType>,
     args: Vec<String>,
@@ -33,6 +42,7 @@ impl Arguments {
         let map = HashMap::new();
 
         for a in &self.args {
+            let arg = 
         }
 
         map
