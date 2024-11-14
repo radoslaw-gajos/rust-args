@@ -18,6 +18,11 @@ impl Argument {
     }
 }
 
+enum Token {
+    Key,
+    Value,
+}
+
 struct Arguments {
     config: HashMap<char, ArgType>,
     args: Vec<String>,
