@@ -1,3 +1,16 @@
+enum ArgumentType {
+    Bool,
+}
+
+struct Schema {
+}
+
+impl Schema {
+    fn get(c: char) -> Option<ArgumentType> {
+        None
+    }
+}
+
 #[derive(Debug, PartialEq)]
 struct Token {
 }
