@@ -1,3 +1,4 @@
+#[derive(Debug, PartialEq)]
 pub enum ArgumentType {
     Bool,
 }
@@ -9,8 +10,30 @@ mod schema {
     }
 
     impl Schema {
-        fn get(c: char) -> Option<ArgumentType> {
+        fn new() -> Self {
+            Self {
+            }
+        }
+
+        fn get(&self, c: char) -> Option<ArgumentType> {
             None
+        }
+    }
+
+    #[cfg(test)]
+    mod tests {
+        use super::*;
+
+        #[test]
+        fn should_return_none_when_not_defined() {
+            // given
+            let schema = Schema::new();
+
+            // when
+            let arg = schema.get('b');
+
+            // then
+            assert_eq!(arg, None);
         }
     }
 }
