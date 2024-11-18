@@ -31,4 +31,16 @@ mod tests {
         // then
         assert_eq!(tokens, Vec::new());
     }
+
+    #[test]
+    fn should_ignore_first_argument() {
+        // given
+        let mut parser = TokenParser::new(vec!["app_name"]);
+
+        // when
+        let tokens = parser.collect();
+        
+        // then
+        assert_eq!(tokens, Vec::new());
+    }
 }
