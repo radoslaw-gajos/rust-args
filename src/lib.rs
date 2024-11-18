@@ -2,6 +2,20 @@
 struct Token {
 }
 
+struct Tokens {
+}
+
+impl Tokens {
+    fn new() -> Self {
+        Self {
+        }
+    }
+
+    fn size(&self) -> usize {
+        0usize
+    }
+}
+
 struct TokenParser {
 }
 
@@ -11,8 +25,8 @@ impl TokenParser {
         }
     }
 
-    fn collect(mut self) -> Vec<Token> {
-        Vec::new()
+    fn collect(mut self) -> Tokens {
+        Tokens::new()
     }
 }
 
@@ -21,7 +35,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn should_return_empty_list_when_no_args() {
+    fn should_return_empty_token_collection_when_no_args() {
         // given
         let mut parser = TokenParser::new(Vec::new());
 
@@ -29,7 +43,7 @@ mod tests {
         let tokens = parser.collect();
         
         // then
-        assert_eq!(tokens, Vec::new());
+        assert_eq!(tokens.size(), 0);
     }
 
     #[test]
@@ -41,6 +55,6 @@ mod tests {
         let tokens = parser.collect();
         
         // then
-        assert_eq!(tokens, Vec::new());
+        assert_eq!(tokens.size(), 0);
     }
 }
