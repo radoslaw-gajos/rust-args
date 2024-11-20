@@ -1,4 +1,4 @@
-use crate::schema::ArgumentType;
+use crate::schema::argument::ArgumentType;
 
 #[derive(Debug, PartialEq)]
 pub struct Token {
