@@ -28,6 +28,8 @@ impl Schema {
         if let Some(t) = self.map.get(&key) {
             match t.as_str() {
                 "bool" => Some(ArgumentType::Bool),
+                "string" => Some(ArgumentType::Str),
+                "int" => Some(ArgumentType::Int),
                 &_ => panic!("invalid argument!"),
             }
         } else {
@@ -65,5 +67,50 @@ mod tests {
         // then
         assert!(arg.is_some());
         assert_eq!(arg, Some(ArgumentType::Bool));
+    }
+
+    #[test]
+    fn should_return_string_argument() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+
+        // when
+        let arg = schema.get('s');
+
+        // then
+        assert!(arg.is_some());
+        assert_eq!(arg, Some(ArgumentType::Str));
+    }
+
+    #[test]
+    fn should_return_integer_argument() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+        ]);
+
+        // when
+        let arg = schema.get('i');
+
+        // then
+        assert!(arg.is_some());
+        assert_eq!(arg, Some(ArgumentType::Int));
+    }
+
+    #[test]
+    fn should_return_arguments() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+            ("s".to_string(), "string".to_string()),
+            ("b".to_string(), "bool".to_string()),
+        ]);
+
+        // then
+        assert_eq!(schema.get('i'), Some(ArgumentType::Int));
+        assert_eq!(schema.get('s'), Some(ArgumentType::Str));
+        assert_eq!(schema.get('b'), Some(ArgumentType::Bool));
     }
 }
