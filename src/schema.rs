@@ -1,5 +1,11 @@
-use crate::ArgumentType;
 use std::collections::HashMap;
+
+#[derive(Debug, PartialEq)]
+pub enum ArgumentType {
+    Bool,
+    Str,
+    Int,
+}
 
 pub struct Schema {
     map: HashMap<String, String>,
