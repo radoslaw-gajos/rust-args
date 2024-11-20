@@ -1,7 +1,11 @@
 use crate::schema::argument::ArgumentType;
 
 #[derive(Debug, PartialEq)]
-pub struct Token {
+pub enum Token {
+    Argument(ArgumentType),
+    StrValue(String),
+    IntValue(i64),
+    BoolValue(bool),
 }
 
 pub struct Tokens {
@@ -19,11 +23,13 @@ impl Tokens {
 }
 
 pub struct TokenParser {
+    args: Vec<String>,
 }
 
 impl TokenParser {
     fn new(args: Vec<&str>) -> Self {
         Self {
+            args: args.into_iter().map(String::from).collect(),
         }
     }
 
