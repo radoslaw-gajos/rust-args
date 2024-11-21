@@ -1,4 +1,5 @@
 use crate::schema::argument::ArgumentType;
+use crate::schema::Schema;
 
 #[derive(Debug, PartialEq)]
 pub enum Token {
@@ -22,14 +23,28 @@ impl Tokens {
     }
 }
 
+#[derive(Default)]
 pub struct TokenParser {
     args: Vec<String>,
+    schema: Schema,
 }
 
 impl TokenParser {
-    fn new(args: Vec<&str>) -> Self {
+    fn new() -> Self {
+        Self::default()
+    }
+
+    fn args(mut self, args: Vec<&str>) -> Self {
         Self {
             args: args.into_iter().map(String::from).collect(),
+            ..self
+        }
+    }
+
+    fn schema(mut self, schema: Schema) -> Self {
+        Self {
+            schema,
+            ..self
         }
     }
 
@@ -45,7 +60,7 @@ mod tests {
     #[test]
     fn should_return_empty_token_collection_when_no_args() {
         // given
-        let mut parser = TokenParser::new(Vec::new());
+        let mut parser = TokenParser::new();
 
         // when
         let tokens = parser.collect();
@@ -57,7 +72,8 @@ mod tests {
     #[test]
     fn should_ignore_first_argument() {
         // given
-        let mut parser = TokenParser::new(vec!["app_name"]);
+        let mut parser = TokenParser::new()
+            .args(vec!["app_name"]);
 
         // when
         let tokens = parser.collect();
