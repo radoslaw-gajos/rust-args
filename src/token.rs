@@ -81,4 +81,23 @@ mod tests {
         // then
         assert_eq!(tokens.size(), 0);
     }
+
+    #[test]
+    fn should_get_boolean_argument() {
+        // given
+        let schema = Schema::from(vec![
+            ("b".to_string(), "bool".to_string()),
+        ]);
+        let mut parser = TokenParser::new()
+            .args(vec!["app_name", "-b"])
+            .schema(Schema::from(vec![
+                ("b".to_string(), "bool".to_string()),
+            ]));
+
+        // when
+        let tokens = parser.collect();
+
+        // then
+        assert!(false);
+    }
 }
