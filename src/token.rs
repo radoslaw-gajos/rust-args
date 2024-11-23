@@ -1,5 +1,5 @@
 use crate::schema::argument::ArgumentType;
-use crate::schema::Schema;
+use crate::schema::{self, Schema};
 
 #[derive(Debug, PartialEq)]
 pub enum Token {
@@ -90,14 +90,12 @@ mod tests {
         ]);
         let mut parser = TokenParser::new()
             .args(vec!["app_name", "-b"])
-            .schema(Schema::from(vec![
-                ("b".to_string(), "bool".to_string()),
-            ]));
+            .schema(schema);
 
         // when
         let tokens = parser.collect();
 
         // then
-        assert!(false);
+        assert_eq!(tokens.size(), 1);
     }
 }

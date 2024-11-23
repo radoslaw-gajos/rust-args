@@ -10,13 +10,13 @@ pub struct Schema {
 }
 
 impl Schema {
-    fn new() -> Self {
+    pub fn new() -> Self {
         Self {
             map: HashMap::new(),
         }
     }
 
-    fn from(entries: Vec<(String, String)>) -> Self {
+    pub fn from(entries: Vec<(String, String)>) -> Self {
         let map = entries
             .into_iter()
             .collect();
@@ -26,7 +26,7 @@ impl Schema {
         }
     }
 
-    fn get(&self, c: char) -> Option<ArgumentType> {
+    pub fn get(&self, c: char) -> Option<ArgumentType> {
         let key = c.to_string();
 
         self.map.get(&key)?.arg_type()
