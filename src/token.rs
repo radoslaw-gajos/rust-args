@@ -10,16 +10,22 @@ pub enum Token {
 }
 
 pub struct Tokens {
+    items: Vec<Token>,
 }
 
 impl Tokens {
     fn new() -> Self {
         Self {
+            items: Vec::new(),
         }
     }
 
+    fn add(&mut self, token: Token) {
+        self.items.push(token);
+    }
+
     fn size(&self) -> usize {
-        0usize
+        self.items.len()
     }
 }
 
