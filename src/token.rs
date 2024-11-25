@@ -33,6 +33,24 @@ impl Tokens {
 pub struct TokenParser {
     args: Vec<String>,
     schema: Schema,
+    strategy: Box<dyn ParserStrategy>,
+}
+
+trait ParserStrategy {
+    fn parse(&self, parser: &mut TokenParser);
+}
+
+struct ArgumentParser;
+
+impl ParserStrategy for ArgumentParser {
+    fn parse(&self, parser: &mut TokenParser) {
+    }
+}
+
+impl Default for Box<dyn ParserStrategy> {
+    fn default() -> Self {
+        Box::new(ArgumentParser)
+    }
 }
 
 impl TokenParser {
@@ -56,6 +74,10 @@ impl TokenParser {
 
     fn collect(mut self) -> Tokens {
         Tokens::new()
+    }
+
+    fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
+        self.strategy = strategy;
     }
 }
 
