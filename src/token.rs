@@ -1,5 +1,6 @@
 use crate::schema::argument::ArgumentType;
 use crate::schema::{self, Schema};
+use std::rc::Rc;
 
 #[derive(Debug, PartialEq)]
 pub enum Token {
@@ -34,7 +35,7 @@ impl Tokens {
 pub struct TokenParser {
     args: Vec<String>,
     schema: Schema,
-    strategy: Option<Box<dyn ParserStrategy>>,
+    strategy: Rc<Box<dyn ParserStrategy>>,
     tokens: Tokens,
 }
 
@@ -45,18 +46,16 @@ trait ParserStrategy {
 struct ArgumentParser;
 
 impl ParserStrategy for ArgumentParser {
-    fn parse(&self, parser: TokenParser) -> TokenParser {
+    fn parse(&self, mut parser: TokenParser) -> TokenParser {
         parser
     }
 }
 
-/*
 impl Default for Box<dyn ParserStrategy> {
     fn default() -> Self {
-        Some(ArgumentParser)
+        Box::new(ArgumentParser)
     }
 }
-*/
 
 impl TokenParser {
     fn new() -> Self {
@@ -82,11 +81,11 @@ impl TokenParser {
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
-        self.strategy = Some(strategy);
+        *self.strategy.borrow_mut() = strategy;
     }
 
     fn parse_current(mut self) -> Self {
-        let strategy = self.strategy.take().expect("Strategy should be set");
+        let strategy = self.strategy.borrow();
         strategy.parse(self)
     }
 }
