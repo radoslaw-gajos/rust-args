@@ -34,26 +34,29 @@ impl Tokens {
 pub struct TokenParser {
     args: Vec<String>,
     schema: Schema,
-    strategy: Box<dyn ParserStrategy>,
+    strategy: Option<Box<dyn ParserStrategy>>,
     tokens: Tokens,
 }
 
 trait ParserStrategy {
-    fn parse(&self, parser: &mut TokenParser);
+    fn parse(&self, parser: TokenParser) -> TokenParser;
 }
 
 struct ArgumentParser;
 
 impl ParserStrategy for ArgumentParser {
-    fn parse(&self, parser: &mut TokenParser) {
+    fn parse(&self, parser: TokenParser) -> TokenParser {
+        parser
     }
 }
 
+/*
 impl Default for Box<dyn ParserStrategy> {
     fn default() -> Self {
-        Box::new(ArgumentParser)
+        Some(ArgumentParser)
     }
 }
+*/
 
 impl TokenParser {
     fn new() -> Self {
@@ -79,7 +82,12 @@ impl TokenParser {
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
-        self.strategy = strategy;
+        self.strategy = Some(strategy);
+    }
+
+    fn parse_current(mut self) -> Self {
+        let strategy = self.strategy.take().expect("Strategy should be set");
+        strategy.parse(self)
     }
 }
 
