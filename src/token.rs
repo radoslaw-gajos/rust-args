@@ -9,6 +9,7 @@ pub enum Token {
     BoolValue(bool),
 }
 
+#[derive(Default)]
 pub struct Tokens {
     items: Vec<Token>,
 }
@@ -34,6 +35,7 @@ pub struct TokenParser {
     args: Vec<String>,
     schema: Schema,
     strategy: Box<dyn ParserStrategy>,
+    tokens: Tokens,
 }
 
 trait ParserStrategy {
@@ -73,7 +75,7 @@ impl TokenParser {
     }
 
     fn collect(mut self) -> Tokens {
-        Tokens::new()
+        self.tokens
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
