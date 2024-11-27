@@ -80,7 +80,15 @@ impl TokenParser {
     }
 
     fn collect(mut self) -> Tokens {
-        self.tokens
+        let mut parser = self;
+        while !parser.is_done() {
+            
+        }
+        parser.tokens
+    }
+
+    fn is_done(&self) -> bool {
+        true
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
