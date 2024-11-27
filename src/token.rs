@@ -1,6 +1,6 @@
 use crate::schema::argument::ArgumentType;
 use crate::schema::{self, Schema};
-use std::rc::Rc;
+use dyn_clone::{clone_trait_object, DynClone};
 
 #[derive(Debug, PartialEq)]
 pub enum Token {
@@ -35,14 +35,17 @@ impl Tokens {
 pub struct TokenParser {
     args: Vec<String>,
     schema: Schema,
-    strategy: Rc<Box<dyn ParserStrategy>>,
+    strategy: Box<dyn ParserStrategy>,
     tokens: Tokens,
 }
 
-trait ParserStrategy {
+trait ParserStrategy: DynClone {
     fn parse(&self, parser: TokenParser) -> TokenParser;
 }
 
+clone_trait_object!(ParserStrategy);
+
+#[derive(Clone)]
 struct ArgumentParser;
 
 impl ParserStrategy for ArgumentParser {
@@ -81,11 +84,11 @@ impl TokenParser {
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
-        *self.strategy.borrow_mut() = strategy;
+        self.strategy = strategy;
     }
 
     fn parse_current(mut self) -> Self {
-        let strategy = self.strategy.borrow();
+        let strategy = self.strategy.clone();
         strategy.parse(self)
     }
 }
