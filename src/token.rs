@@ -82,7 +82,7 @@ impl TokenParser {
     fn collect(mut self) -> Tokens {
         let mut parser = self;
         while !parser.is_done() {
-            
+            parser = parse_current();
         }
         parser.tokens
     }
