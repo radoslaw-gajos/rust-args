@@ -34,6 +34,7 @@ impl Tokens {
 #[derive(Default)]
 pub struct TokenParser {
     args: Vec<String>,
+    index: usize,
     schema: Schema,
     strategy: Box<dyn ParserStrategy>,
     tokens: Tokens,
@@ -82,13 +83,14 @@ impl TokenParser {
     fn collect(mut self) -> Tokens {
         let mut parser = self;
         while !parser.is_done() {
-            parser = parse_current();
+            parser = parser.parse_current();
+            parser.next();
         }
         parser.tokens
     }
 
     fn is_done(&self) -> bool {
-        true
+        self.index >= self.args.len()
     }
 
     fn set_strategy(&mut self, strategy: Box<dyn ParserStrategy>) {
@@ -98,6 +100,10 @@ impl TokenParser {
     fn parse_current(mut self) -> Self {
         let strategy = self.strategy.clone();
         strategy.parse(self)
+    }
+
+    fn next(&mut self) {
+        self.index += 1;
     }
 }
 
