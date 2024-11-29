@@ -105,6 +105,10 @@ impl TokenParser {
     fn next(&mut self) {
         self.index += 1;
     }
+    
+    fn current_arg(&self) -> &str {
+        &self.args.get(self.index).expect("Index should be valid")
+    }
 }
 
 #[cfg(test)]
