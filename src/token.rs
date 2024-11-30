@@ -49,7 +49,36 @@ clone_trait_object!(ParserStrategy);
 #[derive(Clone)]
 struct ArgumentParser;
 
+#[derive(Clone)]
+struct StrParser;
+
+#[derive(Clone)]
+struct IntParser;
+
 impl ParserStrategy for ArgumentParser {
+    fn parse(&self, mut parser: TokenParser) -> TokenParser {
+        let arg = parser.current_arg();
+        let arg_type = parser.schema.from_str(arg).expect("Expects valid argument");
+
+        let strategy: Box<dyn ParserStrategy> = match arg_type {
+            ArgumentType::Bool => Box::new(ArgumentParser),
+            ArgumentType::Int => Box::new(IntParser),
+            ArgumentType::Str => Box::new(StrParser),
+        };
+
+        parser.set_strategy(strategy);
+
+        parser
+    }
+}
+
+impl ParserStrategy for StrParser {
+    fn parse(&self, mut parser: TokenParser) -> TokenParser {
+        parser
+    }
+}
+
+impl ParserStrategy for IntParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
         parser
     }

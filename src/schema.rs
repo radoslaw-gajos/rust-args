@@ -31,6 +31,12 @@ impl Schema {
 
         self.map.get(&key)?.arg_type()
     }
+
+    pub fn from_str(&self, string: &str) -> Option<ArgumentType> {
+        let c = string.chars().nth(1).expect("Expects valid String");
+
+        self.get(c)
+    }
 }
 
 #[cfg(test)]
