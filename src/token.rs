@@ -92,7 +92,9 @@ impl Default for Box<dyn ParserStrategy> {
 
 impl TokenParser {
     fn new() -> Self {
-        Self::default()
+        let mut parser = Self::default();
+        parser.index = 1; // ignore app name
+        parser
     }
 
     fn args(mut self, args: Vec<&str>) -> Self {
