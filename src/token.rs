@@ -4,6 +4,7 @@ use dyn_clone::{clone_trait_object, DynClone};
 
 #[derive(Debug, PartialEq)]
 pub enum Token {
+    AppName,
     Argument(ArgumentType),
     StrValue(String),
     IntValue(i64),
@@ -47,6 +48,9 @@ trait ParserStrategy: DynClone {
 clone_trait_object!(ParserStrategy);
 
 #[derive(Clone)]
+struct InitParser;
+
+#[derive(Clone)]
 struct ArgumentParser;
 
 #[derive(Clone)]
@@ -54,6 +58,14 @@ struct StrParser;
 
 #[derive(Clone)]
 struct IntParser;
+
+impl ParserStrategy for InitParser {
+    fn parse(&self, mut parser: TokenParser) -> TokenParser {
+        parser.tokens.add(Token::AppName);
+        parser.set_strategy(Box::new(ArgumentParser));
+        parser
+    }
+}
 
 impl ParserStrategy for ArgumentParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
@@ -86,14 +98,13 @@ impl ParserStrategy for IntParser {
 
 impl Default for Box<dyn ParserStrategy> {
     fn default() -> Self {
-        Box::new(ArgumentParser)
+        Box::new(InitParser)
     }
 }
 
 impl TokenParser {
     fn new() -> Self {
         let mut parser = Self::default();
-        parser.index = 1; // ignore app name
         parser
     }
 
@@ -159,7 +170,7 @@ mod tests {
     }
 
     #[test]
-    fn should_ignore_first_argument() {
+    fn should_interpret_first_arg_as_appname() {
         // given
         let mut parser = TokenParser::new()
             .args(vec!["app_name"]);
@@ -168,7 +179,7 @@ mod tests {
         let tokens = parser.collect();
         
         // then
-        assert_eq!(tokens.size(), 0);
+        assert_eq!(tokens.size(), 1);
     }
 
     #[test]
@@ -185,6 +196,6 @@ mod tests {
         let tokens = parser.collect();
 
         // then
-        assert_eq!(tokens.size(), 1);
+        assert_eq!(tokens.size(), 2);
     }
 }
