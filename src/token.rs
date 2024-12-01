@@ -30,6 +30,10 @@ impl Tokens {
     fn size(&self) -> usize {
         self.items.len()
     }
+
+    fn get(&self, index: usize) -> &Token {
+        self.items.get(index).expect("Valid index expected")
+    }
 }
 
 #[derive(Default)]
@@ -79,6 +83,7 @@ impl ParserStrategy for ArgumentParser {
         };
 
         parser.set_strategy(strategy);
+        parser.tokens.add(Token::Argument(arg_type));
 
         parser
     }
@@ -197,5 +202,6 @@ mod tests {
 
         // then
         assert_eq!(tokens.size(), 2);
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Bool));
     }
 }
