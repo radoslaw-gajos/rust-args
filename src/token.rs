@@ -8,7 +8,6 @@ pub enum Token {
     Argument(ArgumentType),
     StrValue(String),
     IntValue(i64),
-    BoolValue(bool),
 }
 
 #[derive(Default)]
