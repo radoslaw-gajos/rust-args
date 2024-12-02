@@ -90,6 +90,12 @@ impl ParserStrategy for ArgumentParser {
 
 impl ParserStrategy for StrParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
+        let string_value = parser.current_arg().to_string();
+        let token = Token::StrValue(string_value);
+
+        parser.tokens.add(token);
+
+        parser.set_strategy(Box::new(ArgumentParser));
         parser
     }
 }
@@ -202,5 +208,24 @@ mod tests {
         // then
         assert_eq!(tokens.size(), 2);
         assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Bool));
+    }
+
+    #[test]
+    fn should_get_string_argument() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+        let mut parser = TokenParser::new()
+            .args(vec!["app_name", "-s", "string"])
+            .schema(schema);
+
+        // when
+        let tokens = parser.collect();
+
+        // then
+        assert_eq!(tokens.size(), 3);
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Str));
+        assert_eq!(tokens.get(2), &Token::StrValue("string".to_string()));
     }
 }
