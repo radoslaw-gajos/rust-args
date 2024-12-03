@@ -253,4 +253,29 @@ mod tests {
         assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int));
         assert_eq!(tokens.get(2), &Token::IntValue(42));
     }
+
+    #[test]
+    fn should_parse_multiple_arguments() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+            ("s".to_string(), "string".to_string()),
+            ("b".to_string(), "bool".to_string()),
+        ]);
+        let mut parser = TokenParser::new()
+            .args(vec!["app_name", "-i", "42", "-b", "-s", "string"])
+            .schema(schema);
+
+        // when
+        let tokens = parser.collect();
+
+        // then
+        assert_eq!(tokens.size(), 6);
+        assert_eq!(tokens.get(0), &Token::AppName);
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int));
+        assert_eq!(tokens.get(2), &Token::IntValue(42));
+        assert_eq!(tokens.get(3), &Token::Argument(ArgumentType::Bool));
+        assert_eq!(tokens.get(4), &Token::Argument(ArgumentType::Str));
+        assert_eq!(tokens.get(5), &Token::StrValue("string".to_string()));
+    }
 }
