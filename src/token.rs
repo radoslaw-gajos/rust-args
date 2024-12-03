@@ -102,6 +102,12 @@ impl ParserStrategy for StrParser {
 
 impl ParserStrategy for IntParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
+        let int_value = parser.current_arg().parse().expect("Valid number expected");
+        let token = Token::IntValue(int_value);
+
+        parser.tokens.add(token);
+
+        parser.set_strategy(Box::new(ArgumentParser));
         parser
     }
 }
@@ -227,5 +233,24 @@ mod tests {
         assert_eq!(tokens.size(), 3);
         assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Str));
         assert_eq!(tokens.get(2), &Token::StrValue("string".to_string()));
+    }
+
+    #[test]
+    fn should_get_int_argument() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+        ]);
+        let mut parser = TokenParser::new()
+            .args(vec!["app_name", "-i", "42"])
+            .schema(schema);
+
+        // when
+        let tokens = parser.collect();
+
+        // then
+        assert_eq!(tokens.size(), 3);
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int));
+        assert_eq!(tokens.get(2), &Token::IntValue(42));
     }
 }
