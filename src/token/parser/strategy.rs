@@ -10,16 +10,16 @@ pub trait ParserStrategy: DynClone {
 clone_trait_object!(ParserStrategy);
 
 #[derive(Clone)]
-pub struct InitParser;
+struct InitParser;
 
 #[derive(Clone)]
-pub struct ArgumentParser;
+struct ArgumentParser;
 
 #[derive(Clone)]
-pub struct StrParser;
+struct StrParser;
 
 #[derive(Clone)]
-pub struct IntParser;
+struct IntParser;
 
 impl ParserStrategy for InitParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
