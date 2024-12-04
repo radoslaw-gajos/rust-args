@@ -2,7 +2,13 @@ use crate::schema::{self, Schema};
 use crate::token::tokens::Tokens;
 use crate::token::Token;
 use crate::schema::argument::ArgumentType;
-use dyn_clone::{clone_trait_object, DynClone};
+use crate::token::parser::strategy::{
+    ParserStrategy,
+    InitParser,
+    ArgumentParser,
+    StrParser,
+    IntParser,
+};
 
 #[derive(Default)]
 pub struct TokenParser {
@@ -13,77 +19,84 @@ pub struct TokenParser {
     tokens: Tokens,
 }
 
-trait ParserStrategy: DynClone {
-    fn parse(&self, parser: TokenParser) -> TokenParser;
-}
+mod strategy {
+    use crate::token::parser::TokenParser;
+    use crate::token::Token;
+    use crate::schema::argument::ArgumentType;
+    use dyn_clone::{clone_trait_object, DynClone};
 
-clone_trait_object!(ParserStrategy);
-
-#[derive(Clone)]
-struct InitParser;
-
-#[derive(Clone)]
-struct ArgumentParser;
-
-#[derive(Clone)]
-struct StrParser;
-
-#[derive(Clone)]
-struct IntParser;
-
-impl ParserStrategy for InitParser {
-    fn parse(&self, mut parser: TokenParser) -> TokenParser {
-        parser.tokens.add(Token::AppName);
-        parser.set_strategy(Box::new(ArgumentParser));
-        parser
+    pub trait ParserStrategy: DynClone {
+        fn parse(&self, parser: TokenParser) -> TokenParser;
     }
-}
 
-impl ParserStrategy for ArgumentParser {
-    fn parse(&self, mut parser: TokenParser) -> TokenParser {
-        let arg = parser.current_arg();
-        let arg_type = parser.schema.from_str(arg).expect("Expects valid argument");
+    clone_trait_object!(ParserStrategy);
 
-        let strategy: Box<dyn ParserStrategy> = match arg_type {
-            ArgumentType::Bool => Box::new(ArgumentParser),
-            ArgumentType::Int => Box::new(IntParser),
-            ArgumentType::Str => Box::new(StrParser),
-        };
+    #[derive(Clone)]
+    pub struct InitParser;
 
-        parser.set_strategy(strategy);
-        parser.tokens.add(Token::Argument(arg_type));
+    #[derive(Clone)]
+    pub struct ArgumentParser;
 
-        parser
+    #[derive(Clone)]
+    pub struct StrParser;
+
+    #[derive(Clone)]
+    pub struct IntParser;
+
+    impl ParserStrategy for InitParser {
+        fn parse(&self, mut parser: TokenParser) -> TokenParser {
+            parser.tokens.add(Token::AppName);
+            parser.set_strategy(Box::new(ArgumentParser));
+            parser
+        }
     }
-}
 
-impl ParserStrategy for StrParser {
-    fn parse(&self, mut parser: TokenParser) -> TokenParser {
-        let string_value = parser.current_arg().to_string();
-        let token = Token::StrValue(string_value);
+    impl ParserStrategy for ArgumentParser {
+        fn parse(&self, mut parser: TokenParser) -> TokenParser {
+            let arg = parser.current_arg();
+            let arg_type = parser.schema.from_str(arg).expect("Expects valid argument");
 
-        parser.tokens.add(token);
+            let strategy: Box<dyn ParserStrategy> = match arg_type {
+                ArgumentType::Bool => Box::new(ArgumentParser),
+                ArgumentType::Int => Box::new(IntParser),
+                ArgumentType::Str => Box::new(StrParser),
+            };
 
-        parser.set_strategy(Box::new(ArgumentParser));
-        parser
+            parser.set_strategy(strategy);
+            parser.tokens.add(Token::Argument(arg_type));
+
+            parser
+        }
     }
-}
 
-impl ParserStrategy for IntParser {
-    fn parse(&self, mut parser: TokenParser) -> TokenParser {
-        let int_value = parser.current_arg().parse().expect("Valid number expected");
-        let token = Token::IntValue(int_value);
+    impl ParserStrategy for StrParser {
+        fn parse(&self, mut parser: TokenParser) -> TokenParser {
+            let string_value = parser.current_arg().to_string();
+            let token = Token::StrValue(string_value);
 
-        parser.tokens.add(token);
+            parser.tokens.add(token);
 
-        parser.set_strategy(Box::new(ArgumentParser));
-        parser
+            parser.set_strategy(Box::new(ArgumentParser));
+            parser
+        }
     }
-}
 
-impl Default for Box<dyn ParserStrategy> {
-    fn default() -> Self {
-        Box::new(InitParser)
+    impl ParserStrategy for IntParser {
+        fn parse(&self, mut parser: TokenParser) -> TokenParser {
+            let int_value = parser.current_arg().parse().expect("Valid number expected");
+            let token = Token::IntValue(int_value);
+
+            parser.tokens.add(token);
+
+            parser.set_strategy(Box::new(ArgumentParser));
+            parser
+        }
+    }
+
+    impl Default for Box<dyn ParserStrategy> {
+        fn default() -> Self {
+            Box::new(InitParser)
+        }
     }
 }
 
