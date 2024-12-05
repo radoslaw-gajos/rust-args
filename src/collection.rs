@@ -1,3 +1,28 @@
+use crate::token::parser::TokenParser;
+use crate::token::tokens::Tokens;
+use crate::schema::Schema;
+
+struct Collection {
+}
+
+impl Collection {
+    fn from(tokens: Tokens) -> Collection {
+        todo!();
+    }
+
+    fn get_int(&self, key: &str) -> i64 {
+        todo!();
+    }
+
+    fn get_str(&self, key: &str) -> String {
+        todo!();
+    }
+
+    fn get_bool(&self, key: &str) -> bool {
+        todo!();
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
@@ -21,6 +46,6 @@ mod tests {
         // then
         assert_eq!(collection.get_int("i"), 42);
         assert_eq!(collection.get_str("s"), "string");
-        assert!(collection.get_str("b"));
+        assert!(collection.get_bool("b"));
     }
 }

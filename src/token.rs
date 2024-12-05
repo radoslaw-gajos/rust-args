@@ -8,5 +8,5 @@ pub enum Token {
     IntValue(i64),
 }
 
-mod tokens;
-mod parser;
+pub mod tokens;
+pub mod parser;
