@@ -39,7 +39,7 @@ impl TokenParser {
             parser = parser.parse_current();
             parser.next();
         }
-        if (parser.schema.is_some()) {
+        if parser.schema.is_some() {
             parser.tokens.schema_set(parser.schema.unwrap());
         }
 
