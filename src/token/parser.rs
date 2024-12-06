@@ -6,7 +6,7 @@ use crate::token::parser::strategy::ParserStrategy;
 pub struct TokenParser {
     args: Vec<String>,
     index: usize,
-    schema: Schema,
+    schema: Option<Schema>,
     strategy: Box<dyn ParserStrategy>,
     tokens: Tokens,
 }
@@ -28,7 +28,7 @@ impl TokenParser {
 
     pub fn schema(self, schema: Schema) -> Self {
         Self {
-            schema,
+            schema: Some(schema),
             ..self
         }
     }
@@ -39,6 +39,10 @@ impl TokenParser {
             parser = parser.parse_current();
             parser.next();
         }
+        if (parser.schema.is_some()) {
+            parser.tokens.schema_set(parser.schema.unwrap());
+        }
+
         parser.tokens
     }
 

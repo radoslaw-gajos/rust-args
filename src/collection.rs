@@ -3,6 +3,9 @@ use crate::token::tokens::Tokens;
 use crate::schema::Schema;
 
 struct Collection {
+    ints: Vec<i64>,
+    strings: Vec<String>,
+    bools: Vec<bool>,
 }
 
 impl Collection {

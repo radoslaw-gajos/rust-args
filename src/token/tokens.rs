@@ -1,13 +1,16 @@
 use crate::token::Token;
+use crate::schema::Schema;
 
 #[derive(Default)]
 pub struct Tokens {
     items: Vec<Token>,
+    schema: Option<Schema>,
 }
 
 impl Tokens {
-    pub fn new() -> Self {
+    pub fn new(schema: Schema) -> Self {
         Self {
+            schema: Some(schema),
             items: Vec::new(),
         }
     }
@@ -22,5 +25,13 @@ impl Tokens {
 
     pub fn get(&self, index: usize) -> &Token {
         self.items.get(index).expect("Valid index expected")
+    }
+
+    pub fn schema(&self) -> Option<&Schema> {
+        self.schema.as_ref()
+    }
+
+    pub fn schema_set(&mut self, schema: Schema) {
+        self.schema = Some(schema);
     }
 }
