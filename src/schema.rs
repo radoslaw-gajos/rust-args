@@ -4,7 +4,7 @@ use crate::schema::argument::ArgumentTypeFactory;
 
 pub mod argument;
 
-#[derive(Default)]
+#[derive(Default, Clone)]
 pub struct Schema {
     map: HashMap<String, String>,
 }

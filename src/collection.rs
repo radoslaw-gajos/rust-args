@@ -1,16 +1,21 @@
 use crate::token::parser::TokenParser;
 use crate::token::tokens::Tokens;
 use crate::schema::Schema;
+use std::collections::HashMap;
 
+#[derive(Default)]
 struct Collection {
-    ints: Vec<i64>,
-    strings: Vec<String>,
-    bools: Vec<bool>,
+    schema: Schema,
+    ints: HashMap<String,i64>,
+    strings: HashMap<String,String>,
+    bools: HashMap<String,bool>,
 }
 
 impl Collection {
     fn from(tokens: Tokens) -> Collection {
-        todo!();
+        let mut collection = Collection::default();
+        collection.schema = (*tokens.schema().expect("Schema expected")).clone();
+        collection
     }
 
     fn get_int(&self, key: &str) -> i64 {
@@ -22,7 +27,13 @@ impl Collection {
     }
 
     fn get_bool(&self, key: &str) -> bool {
-        todo!();
+        if self.bools.contains_key(key) {
+            return *self.bools.get(key).unwrap();
+        }
+        if self.schema.get(key.chars().nth(0).expect("Valid string expected")).is_some() {
+            return false;
+        }
+        panic!("Key not found in schema!");
     }
 }
 
@@ -50,5 +61,23 @@ mod tests {
         assert_eq!(collection.get_int("i"), 42);
         assert_eq!(collection.get_str("s"), "string");
         assert!(collection.get_bool("b"));
+    }
+
+    #[test]
+    fn should_get_false_when_flag_not_set() {
+        // given
+        let schema = Schema::from(vec![
+            ("b".to_string(), "bool".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert!(!collection.get_bool("b"));
     }
 }
