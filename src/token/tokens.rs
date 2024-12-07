@@ -38,7 +38,7 @@ impl Tokens {
     }
 
     pub fn current(&self) -> Option<&Token> {
-        None
+        self.items.get(self.index)
     }
 }
 
@@ -56,5 +56,18 @@ mod tests {
 
         // then
         assert_eq!(current, None);
+    }
+
+    #[test]
+    fn should_return_first_token() {
+        // given
+        let mut tokens = Tokens::default();
+        tokens.add(Token::AppName);
+
+        // when
+        let current = tokens.current();
+
+        // then
+        assert_eq!(current, Some(Token::AppName).as_ref());
     }
 }
