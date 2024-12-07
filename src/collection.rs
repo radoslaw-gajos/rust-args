@@ -18,11 +18,11 @@ impl Collection {
         collection
     }
 
-    fn get_int(&self, key: &str) -> i64 {
+    fn get_int(&self, key: &str) -> Option<i64> {
         todo!();
     }
 
-    fn get_str(&self, key: &str) -> String {
+    fn get_str(&self, key: &str) -> Option<String> {
         todo!();
     }
 
@@ -58,8 +58,8 @@ mod tests {
         let collection = Collection::from(tokens);
 
         // then
-        assert_eq!(collection.get_int("i"), 42);
-        assert_eq!(collection.get_str("s"), "string");
+        assert_eq!(collection.get_int("i"), Some(42));
+        assert_eq!(collection.get_str("s"), Some("string".to_string()));
         assert!(collection.get_bool("b"));
     }
 
@@ -79,5 +79,23 @@ mod tests {
 
         // then
         assert!(!collection.get_bool("b"));
+    }
+
+    #[test]
+    fn should_get_true_when_flag() {
+        // given
+        let schema = Schema::from(vec![
+            ("b".to_string(), "bool".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name", "-b"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert!(collection.get_bool("b"));
     }
 }
