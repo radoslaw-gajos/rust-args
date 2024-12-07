@@ -1,5 +1,6 @@
 use crate::token::Token;
 use crate::schema::Schema;
+use crate::schema::argument::ArgumentType;
 
 #[derive(Default)]
 pub struct Tokens {
@@ -40,6 +41,10 @@ impl Tokens {
     pub fn current(&self) -> Option<&Token> {
         self.items.get(self.index)
     }
+
+    pub fn next(&mut self) {
+        self.index += 1;
+    }
 }
 
 #[cfg(test)]
@@ -69,5 +74,20 @@ mod tests {
 
         // then
         assert_eq!(current, Some(Token::AppName).as_ref());
+    }
+
+    #[test]
+    fn should_get_next_token() {
+        // given
+        let mut tokens = Tokens::default();
+        tokens.add(Token::AppName);
+        tokens.add(Token::Argument(ArgumentType::Bool));
+
+        // when
+        tokens.next();
+        let current = tokens.current();
+
+        // then
+        assert_eq!(current, Some(Token::Argument(ArgumentType::Bool)).as_ref());
     }
 }
