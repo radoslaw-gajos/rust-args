@@ -2,7 +2,7 @@ use crate::schema::argument::ArgumentType;
 
 type Name = String;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Clone)]
 pub enum Token {
     AppName,
     Argument(ArgumentType, Name),

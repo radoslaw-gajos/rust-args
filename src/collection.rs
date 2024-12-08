@@ -27,7 +27,7 @@ impl Collection {
                 break;
             }
 
-            match current.unwrap() {
+            match (*current.unwrap()).clone() {
                 AppName => (),
                 Argument(arg_type, name) => {
                     match arg_type {
