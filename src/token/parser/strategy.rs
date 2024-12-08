@@ -31,11 +31,11 @@ impl ParserStrategy for InitParser {
 
 impl ParserStrategy for ArgumentParser {
     fn parse(&self, mut parser: TokenParser) -> TokenParser {
-        let arg = parser.current_arg();
+        let arg = parser.current_arg().to_owned();
         let arg_type = parser.schema
             .as_ref()
             .expect("Expected schema")
-            .from_str(arg)
+            .from_str(&arg)
             .expect("Expects valid argument");
 
         let strategy: Box<dyn ParserStrategy> = match arg_type {
@@ -45,7 +45,7 @@ impl ParserStrategy for ArgumentParser {
         };
 
         parser.set_strategy(strategy);
-        parser.tokens.add(Token::Argument(arg_type));
+        parser.tokens.add(Token::Argument(arg_type, arg[1..].to_owned()));
 
         parser
     }

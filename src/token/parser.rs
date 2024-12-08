@@ -114,7 +114,7 @@ mod tests {
 
         // then
         assert_eq!(tokens.size(), 2);
-        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Bool));
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Bool, "b".to_string()));
     }
 
     #[test]
@@ -132,7 +132,7 @@ mod tests {
 
         // then
         assert_eq!(tokens.size(), 3);
-        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Str));
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Str, "s".to_string()));
         assert_eq!(tokens.get(2), &Token::StrValue("string".to_string()));
     }
 
@@ -151,7 +151,7 @@ mod tests {
 
         // then
         assert_eq!(tokens.size(), 3);
-        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int));
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int, "i".to_string()));
         assert_eq!(tokens.get(2), &Token::IntValue(42));
     }
 
@@ -173,10 +173,10 @@ mod tests {
         // then
         assert_eq!(tokens.size(), 6);
         assert_eq!(tokens.get(0), &Token::AppName);
-        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int));
+        assert_eq!(tokens.get(1), &Token::Argument(ArgumentType::Int, "i".to_string()));
         assert_eq!(tokens.get(2), &Token::IntValue(42));
-        assert_eq!(tokens.get(3), &Token::Argument(ArgumentType::Bool));
-        assert_eq!(tokens.get(4), &Token::Argument(ArgumentType::Str));
+        assert_eq!(tokens.get(3), &Token::Argument(ArgumentType::Bool, "b".to_string()));
+        assert_eq!(tokens.get(4), &Token::Argument(ArgumentType::Str, "s".to_string()));
         assert_eq!(tokens.get(5), &Token::StrValue("string".to_string()));
     }
 }

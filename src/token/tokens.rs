@@ -81,13 +81,13 @@ mod tests {
         // given
         let mut tokens = Tokens::default();
         tokens.add(Token::AppName);
-        tokens.add(Token::Argument(ArgumentType::Bool));
+        tokens.add(Token::Argument(ArgumentType::Bool, "b".to_string()));
 
         // when
         tokens.next();
         let current = tokens.current();
 
         // then
-        assert_eq!(current, Some(Token::Argument(ArgumentType::Bool)).as_ref());
+        assert_eq!(current, Some(Token::Argument(ArgumentType::Bool, "b".to_string())).as_ref());
     }
 }

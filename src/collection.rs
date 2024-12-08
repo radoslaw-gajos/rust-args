@@ -1,5 +1,8 @@
 use crate::token::parser::TokenParser;
 use crate::token::tokens::Tokens;
+use crate::token::Token;
+use crate::token::Token::{AppName, Argument, StrValue, IntValue};
+use crate::schema::argument::ArgumentType::{Bool, Int, Str};
 use crate::schema::Schema;
 use std::collections::HashMap;
 
@@ -12,9 +15,65 @@ struct Collection {
 }
 
 impl Collection {
-    fn from(tokens: Tokens) -> Collection {
+    fn from(mut tokens: Tokens) -> Collection {
         let mut collection = Collection::default();
         collection.schema = (*tokens.schema().expect("Schema expected")).clone();
+
+        let mut current;
+        loop {
+            current = tokens.current();
+
+            if current.is_none() {
+                break;
+            }
+
+            match current.unwrap() {
+                AppName => (),
+                Argument(arg_type, name) => {
+                    match arg_type {
+                        Bool => {
+                            collection.bools.insert(name.to_string(), true);
+                            ()
+                        },
+                        Int => {
+                            tokens.next();
+                            current = tokens.current();
+                            if current.is_none() {
+                                panic!("Unexpected end of tokens. Expected Integer");
+                            }
+                            let int_val = match current.unwrap() {
+                                IntValue(val) => val,
+                                AppName => panic!("Unexpected AppName Token! Integer expected."),
+                                StrValue(val) => panic!("Unexpected String Token: {val}! Integer expected."),
+                                Argument(_,name) => panic!("Unexpected Argument Token: {name}! Integer expected."),
+                            };
+                            collection.ints.insert(name.to_string(), *int_val);
+                            ()
+                        },
+                        Str => {
+                            tokens.next();
+                            current = tokens.current();
+                            if current.is_none() {
+                                panic!("Unexpected end of tokens. Expected String");
+                            }
+                            let str_val = match current.unwrap() {
+                                StrValue(val) => val,
+                                AppName => panic!("Unexpected AppName Token! String expected."),
+                                IntValue(val) => panic!("Unexpected Int Token: {val}! String expected."),
+                                Argument(_,name) => panic!("Unexpected Argument Token: {name}! String expected."),
+                            };
+                            collection.strings.insert(name.to_string(), str_val.to_string());
+                            ()
+                        },
+                    }
+                },
+                StrValue(val) => panic!("Unexpected String Token: {val}"),
+                IntValue(val) => panic!("Unexpected Int Token: {val}"),
+            }
+
+            tokens.next();
+        }
+
         collection
     }
 
