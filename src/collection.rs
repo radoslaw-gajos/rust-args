@@ -81,8 +81,14 @@ impl Collection {
         todo!();
     }
 
-    fn get_str(&self, key: &str) -> Option<String> {
-        todo!();
+    fn get_str(&self, key: &str) -> Option<&String> {
+        if self.strings.contains_key(key) {
+            return self.strings.get(key);
+        }
+        if self.schema.get(key.chars().nth(0).expect("Valid string expected")).is_some() {
+            return None;
+        }
+        panic!("Key not found in schema!");
     }
 
     fn get_bool(&self, key: &str) -> bool {
@@ -118,7 +124,7 @@ mod tests {
 
         // then
         assert_eq!(collection.get_int("i"), Some(42));
-        assert_eq!(collection.get_str("s"), Some("string".to_string()));
+        assert_eq!(collection.get_str("s"), Some("string".to_string()).as_ref());
         assert!(collection.get_bool("b"));
     }
 
@@ -156,5 +162,23 @@ mod tests {
 
         // then
         assert!(collection.get_bool("b"));
+    }
+
+    #[test]
+    fn should_return_none_when_string_not_set() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert_eq!(collection.get_str("s"), None);
     }
 }
