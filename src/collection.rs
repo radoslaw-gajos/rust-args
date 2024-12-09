@@ -181,4 +181,22 @@ mod tests {
         // then
         assert_eq!(collection.get_str("s"), None);
     }
+
+    #[test]
+    fn should_return_string_value() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name", "-s", "val"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert_eq!(collection.get_str("s"), Some("val".to_string()).as_ref());
+    }
 }
