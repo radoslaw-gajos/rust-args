@@ -78,7 +78,7 @@ impl Collection {
     }
 
     fn get_int(&self, key: &str) -> Option<i64> {
-        todo!();
+        None
     }
 
     fn get_str(&self, key: &str) -> Option<&String> {
@@ -198,5 +198,23 @@ mod tests {
 
         // then
         assert_eq!(collection.get_str("s"), Some("val".to_string()).as_ref());
+    }
+
+    #[test]
+    fn should_return_none_when_int_not_set() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert_eq!(collection.get_int("i"), None);
     }
 }
