@@ -78,7 +78,13 @@ impl Collection {
     }
 
     fn get_int(&self, key: &str) -> Option<i64> {
-        None
+        if self.ints.contains_key(key) {
+            return self.ints.get(key).copied();
+        }
+        if self.schema.get(key.chars().nth(0).expect("Valid string expected")).is_some() {
+            return None;
+        }
+        panic!("Key not found in schema!");
     }
 
     fn get_str(&self, key: &str) -> Option<&String> {
@@ -216,5 +222,23 @@ mod tests {
 
         // then
         assert_eq!(collection.get_int("i"), None);
+    }
+
+    #[test]
+    fn should_return_int() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name", "-i", "-42"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        assert_eq!(collection.get_int("i"), Some(-42));
     }
 }
