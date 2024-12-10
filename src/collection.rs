@@ -241,4 +241,61 @@ mod tests {
         // then
         assert_eq!(collection.get_int("i"), Some(-42));
     }
+
+    #[test]
+    #[should_panic]
+    fn should_panic_if_get_str_instead_of_get_int() {
+        // given
+        let schema = Schema::from(vec![
+            ("i".to_string(), "int".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        collection.get_str("i");
+    }
+
+    #[test]
+    #[should_panic]
+    fn should_panic_if_get_int_instead_of_get_str() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        collection.get_int("s");
+    }
+
+    #[test]
+    #[should_panic]
+    fn should_panic_if_get_bool_instead_of_get_str() {
+        // given
+        let schema = Schema::from(vec![
+            ("s".to_string(), "string".to_string()),
+        ]);
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        // when
+        let collection = Collection::from(tokens);
+
+        // then
+        collection.get_bool("s");
+    }
 }
