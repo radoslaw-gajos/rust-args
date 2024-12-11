@@ -2,7 +2,7 @@ use crate::token::parser::TokenParser;
 use crate::token::tokens::Tokens;
 use crate::token::Token;
 use crate::token::Token::{AppName, Argument, StrValue, IntValue};
-use crate::schema::argument::ArgumentType::{Bool, Int, Str};
+use crate::schema::argument::ArgumentType::{self, Bool, Int, Str};
 use crate::schema::Schema;
 use std::collections::HashMap;
 
@@ -91,8 +91,10 @@ impl Collection {
         if self.strings.contains_key(key) {
             return self.strings.get(key);
         }
-        if self.schema.get(key.chars().nth(0).expect("Valid string expected")).is_some() {
-            return None;
+        if let Some(valid_key) = self.schema.get(key.chars().nth(0).expect("Valid string expected")) {
+            if valid_key == ArgumentType::Str {
+                return None;
+            }
         }
         panic!("Key not found in schema!");
     }
