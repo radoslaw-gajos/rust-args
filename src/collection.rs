@@ -105,8 +105,10 @@ impl Collection {
         if self.bools.contains_key(key) {
             return *self.bools.get(key).unwrap();
         }
-        if self.schema.get(key.chars().nth(0).expect("Valid string expected")).is_some() {
-            return false;
+        if let Some(valid_key) = self.schema.get(key.chars().nth(0).expect("Valid string expected")) {
+            if valid_key == ArgumentType::Bool {
+                return false;
+            }
         }
         panic!("Key not found in schema!");
     }
