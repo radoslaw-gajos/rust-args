@@ -105,13 +105,20 @@ impl Collection {
         if self.bools.contains_key(key) {
             return *self.bools.get(key).unwrap();
         }
-        if let Some(valid_key) = self.schema.get(key.chars().nth(0).expect("Valid string expected")) {
-            if valid_key == ArgumentType::Bool {
-                return false;
-            }
+        if argument_type_matches(key, &self.schema, ArgumentType::Bool) {
+            return false;
         }
         panic!("Key not found in schema!");
     }
+}
+
+fn argument_type_matches(key: &str, schema: &Schema, arg_type: ArgumentType) -> bool {
+    if let Some(valid_key) = schema.get(key.chars().nth(0).expect("Valid string expected")) {
+        if valid_key == arg_type {
+            return true;
+        }
+    }
+    false
 }
 
 #[cfg(test)]
