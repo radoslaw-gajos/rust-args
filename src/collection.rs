@@ -81,10 +81,8 @@ impl Collection {
         if self.ints.contains_key(key) {
             return self.ints.get(key).copied();
         }
-        if let Some(valid_key) = self.schema.get(key.chars().nth(0).expect("Valid string expected")) {
-            if valid_key == ArgumentType::Int {
-                return None;
-            }
+        if argument_type_matches(key, &self.schema, ArgumentType::Int) {
+            return None;
         }
         panic!("Key not found in schema!");
     }
@@ -93,10 +91,8 @@ impl Collection {
         if self.strings.contains_key(key) {
             return self.strings.get(key);
         }
-        if let Some(valid_key) = self.schema.get(key.chars().nth(0).expect("Valid string expected")) {
-            if valid_key == ArgumentType::Str {
-                return None;
-            }
+        if argument_type_matches(key, &self.schema, ArgumentType::Str) {
+            return None;
         }
         panic!("Key not found in schema!");
     }
