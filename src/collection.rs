@@ -77,6 +77,15 @@ impl Collection {
         collection
     }
 
+    pub fn from_args(args: Vec<String>, schema: Schema) -> Self {
+        let parser = TokenParser::new()
+            .args(vec!["app_name"])
+            .schema(schema);
+        let tokens = parser.collect();
+
+        Self::from(tokens)
+    }
+
     fn get_int(&self, key: &str) -> Option<i64> {
         if self.ints.contains_key(key) {
             return self.ints.get(key).copied();

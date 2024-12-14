@@ -1,9 +1,13 @@
+use crate::collection::Collection;
+
 struct App {
+    collection: Collection,
 }
 
 impl App {
     pub fn new(args: Vec<String>) -> Self {
         Self {
+            collection: collection_from_args(args),
         }
     }
 
@@ -16,7 +20,16 @@ impl App {
     }
 
     fn get_collection(&self) -> Collection {
+        self.collection
     }
+}
+
+fn collection_from_args(args: Vec<String>) -> Collection {
+    Collection::from_args(args, get_schema())
+}
+
+fn get_schema() -> Schema {
+    todo!();
 }
 
 #[cfg(test)]
