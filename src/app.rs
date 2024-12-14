@@ -1,4 +1,5 @@
 use crate::collection::Collection;
+use crate::schema::Schema;
 
 struct App {
     collection: Collection,
@@ -19,8 +20,8 @@ impl App {
     fn init(&self) {
     }
 
-    fn get_collection(&self) -> Collection {
-        self.collection
+    fn get_collection(&self) -> &Collection {
+        &self.collection
     }
 }
 
@@ -29,10 +30,27 @@ fn collection_from_args(args: Vec<String>) -> Collection {
 }
 
 fn get_schema() -> Schema {
-    todo!();
+    Schema::from(vec![
+        ("s".to_string(), "string".to_string()),
+        ("b".to_string(), "bool".to_string()),
+        ("i".to_string(), "int".to_string()),
+    ])
 }
 
 #[cfg(test)]
 mod tests {
     use super::*;
+
+    #[test]
+    fn should_return_false_by_default() {
+        // given
+        let args = vec!["app_name".to_string()];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert!(!app.collection.get_bool("b"))
+    }
+
 }

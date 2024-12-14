@@ -7,7 +7,7 @@ use crate::schema::Schema;
 use std::collections::HashMap;
 
 #[derive(Default)]
-struct Collection {
+pub struct Collection {
     schema: Schema,
     ints: HashMap<String,i64>,
     strings: HashMap<String,String>,
@@ -86,7 +86,7 @@ impl Collection {
         Self::from(tokens)
     }
 
-    fn get_int(&self, key: &str) -> Option<i64> {
+    pub fn get_int(&self, key: &str) -> Option<i64> {
         if self.ints.contains_key(key) {
             return self.ints.get(key).copied();
         }
@@ -96,7 +96,7 @@ impl Collection {
         panic!("Key not found in schema!");
     }
 
-    fn get_str(&self, key: &str) -> Option<&String> {
+    pub fn get_str(&self, key: &str) -> Option<&String> {
         if self.strings.contains_key(key) {
             return self.strings.get(key);
         }
@@ -106,7 +106,7 @@ impl Collection {
         panic!("Key not found in schema!");
     }
 
-    fn get_bool(&self, key: &str) -> bool {
+    pub fn get_bool(&self, key: &str) -> bool {
         if self.bools.contains_key(key) {
             return *self.bools.get(key).unwrap();
         }
