@@ -53,4 +53,15 @@ mod tests {
         assert!(!app.collection.get_bool("b"))
     }
 
+    #[test]
+    fn should_return_true_when_flag_set() {
+        // given
+        let args = vec!["app_name".to_string(), "-b".to_string()];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert!(app.collection.get_bool("b"))
+    }
 }
