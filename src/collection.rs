@@ -77,9 +77,9 @@ impl Collection {
         collection
     }
 
-    pub fn from_args(args: Vec<String>, schema: Schema) -> Self {
+    pub fn from_args(args: Vec<&str>, schema: Schema) -> Self {
         let parser = TokenParser::new()
-            .args(vec!["app_name"])
+            .args(args)
             .schema(schema);
         let tokens = parser.collect();
 

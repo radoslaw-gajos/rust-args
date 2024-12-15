@@ -6,7 +6,7 @@ struct App {
 }
 
 impl App {
-    pub fn new(args: Vec<String>) -> Self {
+    pub fn new(args: Vec<&str>) -> Self {
         Self {
             collection: collection_from_args(args),
         }
@@ -25,7 +25,7 @@ impl App {
     }
 }
 
-fn collection_from_args(args: Vec<String>) -> Collection {
+fn collection_from_args(args: Vec<&str>) -> Collection {
     Collection::from_args(args, get_schema())
 }
 
@@ -44,7 +44,7 @@ mod tests {
     #[test]
     fn should_return_false_by_default() {
         // given
-        let args = vec!["app_name".to_string()];
+        let args = vec!["app_name"];
 
         // when
         let app = App::new(args);
@@ -56,7 +56,7 @@ mod tests {
     #[test]
     fn should_return_true_when_flag_set() {
         // given
-        let args = vec!["app_name".to_string(), "-b".to_string()];
+        let args = vec!["app_name", "-b"];
 
         // when
         let app = App::new(args);
