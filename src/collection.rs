@@ -96,9 +96,9 @@ impl Collection {
         panic!("Key not found in schema!");
     }
 
-    pub fn get_str(&self, key: &str) -> Option<&String> {
+    pub fn get_str(&self, key: &str) -> Option<&str> {
         if self.strings.contains_key(key) {
-            return self.strings.get(key);
+            return self.strings.get(key).map(|x| x.as_str());
         }
         if argument_type_matches(key, &self.schema, ArgumentType::Str) {
             return None;
@@ -148,7 +148,7 @@ mod tests {
 
         // then
         assert_eq!(collection.get_int("i"), Some(42));
-        assert_eq!(collection.get_str("s"), Some("string".to_string()).as_ref());
+        assert_eq!(collection.get_str("s"), Some("string"));
         assert!(collection.get_bool("b"));
     }
 
@@ -221,7 +221,7 @@ mod tests {
         let collection = Collection::from(tokens);
 
         // then
-        assert_eq!(collection.get_str("s"), Some("val".to_string()).as_ref());
+        assert_eq!(collection.get_str("s"), Some("val"));
     }
 
     #[test]
