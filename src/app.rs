@@ -64,4 +64,28 @@ mod tests {
         // then
         assert!(app.collection.get_bool("b"))
     }
+
+    #[test]
+    fn should_return_empty_string_when_not_set() {
+        // given
+        let args = vec!["app_name"];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert_eq!(app.collection.get_str("s"), Some(""))
+    }
+
+    #[test]
+    fn should_return_string() {
+        // given
+        let args = vec!["app_name", "-s", "foo"];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert_eq!(app.collection.get_str("s"), Some("foo"))
+    }
 }
