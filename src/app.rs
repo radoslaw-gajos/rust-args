@@ -88,4 +88,28 @@ mod tests {
         // then
         assert_eq!(app.collection.get_str("s"), Some("foo"))
     }
+
+    #[test]
+    fn should_return_none_when_int_not_set() {
+        // given
+        let args = vec!["app_name"];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert_eq!(app.collection.get_int("i"), None)
+    }
+
+    #[test]
+    fn should_return_int() {
+        // given
+        let args = vec!["app_name", "-i", "-42"];
+
+        // when
+        let app = App::new(args);
+
+        // then
+        assert_eq!(app.collection.get_int("i"), Some(-42))
+    }
 }
