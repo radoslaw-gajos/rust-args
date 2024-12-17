@@ -66,7 +66,7 @@ mod tests {
     }
 
     #[test]
-    fn should_return_empty_string_when_not_set() {
+    fn should_return_none_when_string_not_set() {
         // given
         let args = vec!["app_name"];
 
@@ -74,7 +74,7 @@ mod tests {
         let app = App::new(args);
 
         // then
-        assert_eq!(app.collection.get_str("s"), Some(""))
+        assert_eq!(app.collection.get_str("s"), None)
     }
 
     #[test]
