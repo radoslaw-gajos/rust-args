@@ -17,9 +17,6 @@ impl App {
         let col = self.get_collection();
     }
 
-    fn init(&self) {
-    }
-
     fn get_collection(&self) -> &Collection {
         &self.collection
     }
