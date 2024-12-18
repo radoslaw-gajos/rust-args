@@ -1,6 +1,5 @@
 use crate::token::parser::TokenParser;
 use crate::token::tokens::Tokens;
-use crate::token::Token;
 use crate::token::Token::{AppName, Argument, StrValue, IntValue};
 use crate::schema::argument::ArgumentType::{self, Bool, Int, Str};
 use crate::schema::Schema;
@@ -129,6 +128,7 @@ fn argument_type_matches(key: &str, schema: &Schema, arg_type: ArgumentType) -> 
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::token::Token;
 
     #[test]
     fn should_get_values_from_collection() {

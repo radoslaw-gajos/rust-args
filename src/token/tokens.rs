@@ -1,6 +1,5 @@
 use crate::token::Token;
 use crate::schema::Schema;
-use crate::schema::argument::ArgumentType;
 
 #[derive(Default)]
 pub struct Tokens {
@@ -50,6 +49,7 @@ impl Tokens {
 #[cfg(test)]
 mod tests {
     use super::*;
+    use crate::schema::argument::ArgumentType;
 
     #[test]
     fn should_get_none_if_no_more_tokens() {
