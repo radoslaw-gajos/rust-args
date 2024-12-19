@@ -15,8 +15,10 @@ pub struct Collection {
 
 impl Collection {
     fn from(mut tokens: Tokens) -> Collection {
-        let mut collection = Collection::default();
-        collection.schema = (*tokens.schema().expect("Schema expected")).clone();
+        let mut collection = Collection {
+            schema: (*tokens.schema().expect("Schema expected")).clone(),
+            ..Default::default()
+        };
 
         let mut current;
         loop {
