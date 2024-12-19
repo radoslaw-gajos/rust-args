@@ -32,7 +32,6 @@ impl Collection {
                     match arg_type {
                         Bool => {
                             collection.bools.insert(name.to_string(), true);
-                            ()
                         },
                         Int => {
                             tokens.next();
@@ -47,7 +46,6 @@ impl Collection {
                                 Argument(_,name) => panic!("Unexpected Argument Token: {name}! Integer expected."),
                             };
                             collection.ints.insert(name.to_string(), *int_val);
-                            ()
                         },
                         Str => {
                             tokens.next();
@@ -62,7 +60,6 @@ impl Collection {
                                 Argument(_,name) => panic!("Unexpected Argument Token: {name}! String expected."),
                             };
                             collection.strings.insert(name.to_string(), str_val.to_string());
-                            ()
                         },
                     }
                 },
@@ -128,7 +125,6 @@ fn argument_type_matches(key: &str, schema: &Schema, arg_type: ArgumentType) -> 
 #[cfg(test)]
 mod tests {
     use super::*;
-    use crate::token::Token;
 
     #[test]
     fn should_get_values_from_collection() {

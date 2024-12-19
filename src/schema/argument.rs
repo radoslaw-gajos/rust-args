@@ -17,11 +17,11 @@ impl ArgumentType {
 }
 
 pub trait ArgumentTypeFactory {
-    fn arg_type(self: Self) -> Option<ArgumentType>;
+    fn arg_type(self) -> Option<ArgumentType>;
 }
 
 impl ArgumentTypeFactory for &str {
-    fn arg_type(self: Self) -> Option<ArgumentType> {
+    fn arg_type(self) -> Option<ArgumentType> {
         ArgumentType::from(self)
     }
 }

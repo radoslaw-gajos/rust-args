@@ -15,8 +15,7 @@ mod strategy;
 
 impl TokenParser {
     pub fn new() -> Self {
-        let parser = Self::default();
-        parser
+        Self::default()
     }
 
     pub fn args(self, args: Vec<&str>) -> Self {
@@ -64,7 +63,7 @@ impl TokenParser {
     }
     
     fn current_arg(&self) -> &str {
-        &self.args.get(self.index).expect("Index should be valid")
+        self.args.get(self.index).expect("Index should be valid")
     }
 }
 
