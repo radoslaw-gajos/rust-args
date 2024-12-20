@@ -116,7 +116,7 @@ impl Collection {
 }
 
 fn argument_type_matches(key: &str, schema: &Schema, arg_type: ArgumentType) -> bool {
-    if let Some(valid_key) = schema.get(key.chars().nth(0).expect("Valid string expected")) {
+    if let Some(valid_key) = schema.get(key.chars().next().expect("Valid string expected")) {
         if valid_key == arg_type {
             return true;
         }
