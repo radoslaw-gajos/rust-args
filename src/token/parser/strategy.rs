@@ -35,7 +35,7 @@ impl ParserStrategy for ArgumentParser {
         let arg_type = parser.schema
             .as_ref()
             .expect("Expected schema")
-            .from_str(&arg)
+            .str_to_argtype(&arg)
             .expect("Expects valid argument");
 
         let strategy: Box<dyn ParserStrategy> = match arg_type {
